@@ -1,7 +1,7 @@
 package net.jorjai.packInstalaciones;
 
 /** Clase que simula una instalación deportiva. */
-public abstract class Instalacion {
+public class Instalacion {
     private String nombre;
     private int codigo;
     private int horaApertura;
@@ -97,9 +97,6 @@ public abstract class Instalacion {
     public void printInheritancePath() {
         System.out.println(inheritancePath());
     }
-
-    
-	public abstract int precioAlquiler();
     
     /**
      * Devuelve el nombre de la instalación.
