@@ -1,7 +1,7 @@
 package net.jorjai.packInstalaciones;
 
 /** Clase que simula una instalación deportiva. */
-public class Instalacion {
+public abstract class Instalacion {
     private String nombre;
     private int codigo;
     private int horaApertura;
