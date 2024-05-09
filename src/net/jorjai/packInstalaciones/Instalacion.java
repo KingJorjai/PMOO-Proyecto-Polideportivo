@@ -106,7 +106,7 @@ public class Instalacion {
     public void printInheritancePath() {
         System.out.println(inheritancePath());
     }
-
+    
     /**
      * Devuelve el nombre de la instalación.
      * @return Nombre de la instalación.
