@@ -19,6 +19,16 @@ public class Piscina extends Interior {
 		this.cloro = cloro;
 	}
 
+	@Override
+	public String inheritancePath() {
+		return super.inheritancePath() + " -> Piscina";
+	}
+
+	@Override
+	public void printInheritancePath() {
+		System.out.println(inheritancePath());
+	}
+
 	/**
 	 * Devuelve la cantidad de cloro de la piscina.
 	 * 
@@ -28,14 +38,12 @@ public class Piscina extends Interior {
 		return cloro;
 	}
 
-	@Override
-	public String inheritancePath() {
-		return super.inheritancePath() + " -> Piscina";
-	}
-
-	@Override
-	public void printInheritancePath() {
-		System.out.println(inheritancePath());
+	/**
+	 * Establece la cantidad de cloro de la piscina.
+	 * @param cloro	Cantidad de cloro de la piscina.
+	 */
+	public void setCloro(double cloro) {
+		this.cloro = cloro;
 	}
 
 }
