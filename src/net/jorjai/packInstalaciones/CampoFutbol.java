@@ -18,6 +18,16 @@ public class CampoFutbol extends Exterior {
 		this.gradas = gradas;
 	}
 
+	@Override
+	public String inheritancePath() {
+		return super.inheritancePath() + "#CampoFutbol";
+	}
+
+	@Override
+	public void printInheritancePath() {
+		System.out.println(inheritancePath());
+	}
+
 	/**
 	 * Devuelve si el campo de fútbol tiene gradas.
 	 * 
@@ -35,16 +45,6 @@ public class CampoFutbol extends Exterior {
 	 */
 	public void setGradas(boolean gradas) {
 		this.gradas = gradas;
-	}
-
-	@Override
-	public String inheritancePath() {
-		return super.inheritancePath() + "#CampoFutbol";
-	}
-
-	@Override
-	public void printInheritancePath() {
-		System.out.println(inheritancePath());
 	}
 
 }

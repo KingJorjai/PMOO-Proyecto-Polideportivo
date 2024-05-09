@@ -1,7 +1,7 @@
 package net.jorjai.packInstalaciones;
 
 /* Clase que simula una instalación deportiva al aire libre. */
-public class Exterior extends Instalacion {
+public abstract class Exterior extends Instalacion {
 	private int anioConstruccion;
 
 	/**
