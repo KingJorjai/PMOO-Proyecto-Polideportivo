@@ -79,6 +79,15 @@ public class Instalacion {
             this.deporteActual = deporte;
         }
     }
+    
+	/**
+	 * Devuelve el precio de alquiler de la instalación.
+	 * 
+	 * @return Precio de alquiler de la instalación.
+	 */
+    public double precioAlquiler() {
+		return 0;
+	}
 
 	/**
 	 * Devuelve el camino de la jerarquía que va desde la clase hoja hasta la clase
