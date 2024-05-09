@@ -3,9 +3,10 @@ package net.jorjai.packInstalaciones;
 /**
  * Clase que simula un frontón.
  */
-public class Fronton extends Exterior {
+public class Fronton extends Exterior implements Acondicionable {
     private boolean cubierto;
     private int metrosCuadrados;
+    private double precioAcondicionamientoUnitario;
 
     /**
      * Constructor de la clase Fronton
@@ -21,42 +22,6 @@ public class Fronton extends Exterior {
         this.metrosCuadrados = metrosCuadrados;
     }
 
-    /**
-     * Devuelve si el frontón es cubierto.
-     * 
-     * @return true si el frontón es cubierto, false en caso contrario.
-     */
-    public boolean getCubierto() {
-        return cubierto;
-    }
-
-    /**
-     * Establece si el frontón es cubierto.
-     * 
-     * @param cubierto true si el frontón es cubierto, false en caso contrario.
-     */
-    public void setCubierto(boolean cubierto) {
-        this.cubierto = cubierto;
-    }
-
-    /**
-     * Devuelve los metros cuadrados del frontón.
-     * 
-     * @return Metros cuadrados del frontón.
-     */
-    public int getMetrosCuadrados() {
-        return metrosCuadrados;
-    }
-
-    /**
-     * Establece los metros cuadrados del frontón.
-     * 
-     * @param metrosCuadrados Metros cuadrados del frontón.
-     */
-    public void setMetrosCuadrados(int metrosCuadrados) {
-        this.metrosCuadrados = metrosCuadrados;
-    }
-
     @Override
     public String inheritancePath() {
         return super.inheritancePath() + "#Fronton";
@@ -69,7 +34,7 @@ public class Fronton extends Exterior {
 
     @Override
     public double precioAlquiler() {
-        return 2 * metrosCuadrados + (cubierto ? 20 : 0);
+        return precioAcondicionamientoUnitario * metrosCuadrados + (cubierto ? 20 : 0);
     }
 
     /**
@@ -86,4 +51,64 @@ public class Fronton extends Exterior {
                 System.out.println("Error: Los horarios no son correctos.");
             }
         }
+
+	@Override
+	public double getPrecioAcondicionamiento() {
+		
+		return metrosCuadrados * precioAcondicionamientoUnitario;
+	}
+
+	/**
+	 * Devuelve el precio del acondicionamiento unitario de la pista de Padel.
+	 * @return	Precio del acondicionamiento unitario de la pista de Padel.
+	 */
+	public double getPrecioAcondicionamientoUnitario() {
+		return precioAcondicionamientoUnitario;
+	}
+
+	/**
+	 * Establece el precio del acondicionamiento unitario de la pista de Padel.
+	 * 
+	 * @param precioAcondicionamientoUnitario Precio del acondicionamiento unitario
+	 *                                        de la pista de Padel.
+	 */
+	public void setPrecioAcondicionamientoUnitario(double precioAcondicionamientoUnitario) {
+		this.precioAcondicionamientoUnitario = precioAcondicionamientoUnitario;
+	}
+
+	/**
+	 * Devuelve los metros cuadrados del frontón.
+	 * 
+	 * @return Metros cuadrados del frontón.
+	 */
+	public int getMetrosCuadrados() {
+	    return metrosCuadrados;
+	}
+
+	/**
+	 * Establece los metros cuadrados del frontón.
+	 * 
+	 * @param metrosCuadrados Metros cuadrados del frontón.
+	 */
+	public void setMetrosCuadrados(int metrosCuadrados) {
+	    this.metrosCuadrados = metrosCuadrados;
+	}
+
+	/**
+	 * Devuelve si el frontón es cubierto.
+	 * 
+	 * @return true si el frontón es cubierto, false en caso contrario.
+	 */
+	public boolean getCubierto() {
+	    return cubierto;
+	}
+
+	/**
+	 * Establece si el frontón es cubierto.
+	 * 
+	 * @param cubierto true si el frontón es cubierto, false en caso contrario.
+	 */
+	public void setCubierto(boolean cubierto) {
+	    this.cubierto = cubierto;
+	}
 }
