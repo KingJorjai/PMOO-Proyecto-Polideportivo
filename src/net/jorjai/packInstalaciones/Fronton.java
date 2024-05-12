@@ -99,7 +99,7 @@ public class Fronton extends Exterior implements Acondicionable {
 	 * 
 	 * @return true si el frontón es cubierto, false en caso contrario.
 	 */
-	public boolean getCubierto() {
+	public boolean isCubierto() {
 	    return cubierto;
 	}
 
