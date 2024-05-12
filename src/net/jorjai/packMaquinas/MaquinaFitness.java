@@ -1,7 +1,7 @@
 package net.jorjai.packMaquinas;
 
 /** Clase que simula una máquina de fitness. */
-public class MaquinaFitness {
+public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
 	private String nombre;
     private String tipo;
@@ -130,5 +130,10 @@ public class MaquinaFitness {
 	 */
     public void setTablaReservas(TablaReservas tablaReservas) {
         this.tablaReservas = tablaReservas;
+    }
+
+    @Override
+    public int compareTo(MaquinaFitness o) {
+        return this.nombre.compareTo(o.nombre);
     }
 }
