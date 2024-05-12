@@ -62,6 +62,10 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
      * @return true si las máquinas son iguales.
      */
     public boolean equals(MaquinaFitness maquina) {
+        if (maquina == null)
+            return false;
+        if (this == maquina)
+            return true;
         return this.nombre.equals(maquina.nombre);
     }
 
