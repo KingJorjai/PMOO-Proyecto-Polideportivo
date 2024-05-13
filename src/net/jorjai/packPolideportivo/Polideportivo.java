@@ -105,15 +105,14 @@ public class Polideportivo {
 	 * @param hora Hora a la que reservar la máquina.
 	 * @return true si se ha podido realizar la reserva correctamente.
 	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
-	 * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException, ReservaException {
+	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException {
 		MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
-		if (maquina == null) {
-			System.out.println("No hay máquinas de tipo " + tipo + " libres a la hora " + hora);
-			return false;
-		} else {
+		try{
 			return maquina.reservar(hora);
+		} catch (ReservaException e) {
+			System.out.println("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
+			return false;
 		}
 	}
 
