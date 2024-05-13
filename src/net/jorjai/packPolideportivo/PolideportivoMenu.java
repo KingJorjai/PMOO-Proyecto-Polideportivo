@@ -1,6 +1,11 @@
 package net.jorjai.packPolideportivo;
 
+import net.jorjai.packMaquinas.MaquinaFitness;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PolideportivoMenu {
@@ -39,21 +44,21 @@ public class PolideportivoMenu {
                 case 2:
                     masReservas();
                     break;
-                case 3:
-                    cargarMaquinas();
-                    break;
-                case 4:
-                    guardarMaquinas();
-                    break;
-                case 5:
-                    mostrarMaquinas();
-                    break;
-                case 6:
-                    ordenarMaquinas();
-                    break;
-                case 7:
-                    eliminarMaquinas();
-                    break;
+//                case 3:
+//                    cargarMaquinas();
+//                    break;
+//                case 4:
+//                    guardarMaquinas();
+//                    break;
+//                case 5:
+//                    mostrarMaquinas();
+//                    break;
+//                case 6:
+//                    ordenarMaquinas();
+//                    break;
+//                case 7:
+//                    eliminarMaquinas();
+//                    break;
                 case 8:
                     // Otra opción
                     break;
@@ -65,6 +70,30 @@ public class PolideportivoMenu {
                     break;
             }
         } while (opcion != 0);
+        sc.close();
+    }
+
+    private void masReservas() {
+        System.out.println("Introduce el tipo de máquina:");
+        String tipo = sc.nextLine();
+        System.out.println("Introduce la hora de la reserva:");
+        int numero = 0;
+        try {
+            numero = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("La hora debe ser un número entero.");
+            return;
+        }
+        sc.nextLine(); // Limpiar buffer
+        ArrayList<String> lista = polideportivo.masReservas(numero);
+        if (lista.isEmpty()) {
+            System.out.println("No hay máquinas con más de " + numero + " reservas.");
+        } else {
+            System.out.println("Máquinas con más de " + numero + " reservas:");
+            for (String maquina : lista) {
+                System.out.println(maquina);
+            }
+        }
     }
 
     private void reservarMaquina() {
