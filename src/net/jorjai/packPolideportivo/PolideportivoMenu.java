@@ -28,6 +28,48 @@ package net.jorjai.packPolideportivo;public class PolideportivoMenu {
             System.out.println("Error al cargar las instalaciones: " + e.getMessage());
         }
     }
+
+    public void menu() {
+        int opcion;
+        do {
+            escribirMenu();
+            opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
+            switch (opcion) {
+                case 1:
+                    reservarMaquina();
+                    break;
+                case 2:
+                    masReservas();
+                    break;
+                case 3:
+                    cargarMaquinas();
+                    break;
+                case 4:
+                    guardarMaquinas();
+                    break;
+                case 5:
+                    mostrarMaquinas();
+                    break;
+                case 6:
+                    ordenarMaquinas();
+                    break;
+                case 7:
+                    eliminarMaquinas();
+                    break;
+                case 8:
+                    // Otra opción
+                    break;
+                case 0:
+                    System.out.println("Hasta pronto.");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+        } while (opcion != 0);
+    }
+
     private void reservarMaquina() {
         System.out.println("Introduce el tipo de máquina:");
         String tipo = sc.nextLine();
