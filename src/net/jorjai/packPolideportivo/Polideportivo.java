@@ -106,8 +106,8 @@ public class Polideportivo {
 	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
 	 */
 	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException {
-		MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
 		try{
+			MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
 			return maquina.reservar(hora);
 		} catch (ReservaException e) {
 			System.out.println("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
