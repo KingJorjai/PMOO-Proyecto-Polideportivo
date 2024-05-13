@@ -1,5 +1,7 @@
 package net.jorjai.packMaquinas;
 
+import net.jorjai.packInfo.ReservaException;
+
 /** Clase que simula una tabla de reservas de una máquina. */
 public class TablaReservas {
 
@@ -23,16 +25,18 @@ public class TablaReservas {
 	 * 
 	 * @param hora Número de la hora a reservar.
 	 * @return true si se ha podido realizar la reserva correctamente.
+	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+	 * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-	public boolean reservar(int hora) {
-		if (hora >= 0 && hora < 24) {
-			if (!reservas[hora]) {
-				reservas[hora] = true;
-				return true;
-			}
-		}
-		return false;
-	}
+	public boolean reservar (int hora) throws IllegalArgumentException, ReservaException {
+        if (estaLibre(hora)) {
+            reservas[hora] = true;
+            return true;
+        }
+        else {
+            throw new ReservaException("La máquina ya está reservada a las " + hora + ":00 horas.");
+        }
+    }
 
 	/**
 	 * Devuelve la cantidad de horas en las que la máquina está reservada.
@@ -71,12 +75,15 @@ public class TablaReservas {
 	 * @param hora Número de la hora a comprobar.
 	 * @return true si la máquina está libre a la hora correspondiente al número
 	 *         dado.
+	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
 	 */
-	public boolean estaLibre(int hora) {
+	public boolean estaLibre(int hora) throws IllegalArgumentException {
 		if (hora >= 0 && hora < 24) {
 			return !reservas[hora];
 		}
-		return false;
+		else {
+			throw new IllegalArgumentException("La hora debe estar comprendida entre 0 y 23, ambas incluidas.");
+		}
 	}
 
 	/**
