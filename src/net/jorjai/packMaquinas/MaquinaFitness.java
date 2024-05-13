@@ -41,8 +41,9 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
 	 * 
 	 * @param hora Hora a comprobar.
 	 * @return true si la máquina está libre a esa hora.
+     * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
 	 */
-    public boolean estaLibre(int hora) {
+    public boolean estaLibre(int hora) throws IllegalArgumentException {
         return tablaReservas.estaLibre(hora);
     }
 
