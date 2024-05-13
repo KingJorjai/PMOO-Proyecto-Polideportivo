@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7abb223d-c569-46f7-ad3b-45badd909115" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/net/jorjai/packInfo/ReservaException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/jorjai/packMaquinas/MaquinaFitness.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/jorjai/packMaquinas/MaquinaFitness.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/jorjai/packMaquinas/TablaReservas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/jorjai/packMaquinas/TablaReservas.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/Polideportivo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/Polideportivo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +56,7 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/exception/ReservaException&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/class/Polideportivo&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -94,7 +91,7 @@
       <workItem from="1715544007016" duration="2154000" />
       <workItem from="1715546205742" duration="1360000" />
       <workItem from="1715552061873" duration="520000" />
-      <workItem from="1715583524225" duration="3083000" />
+      <workItem from="1715583524225" duration="11615000" />
     </task>
     <servers />
   </component>
