@@ -45,4 +45,16 @@ package net.jorjai.packPolideportivo;public class PolideportivoMenu {
             System.out.println(e.getMessage());
         }
     }
+
+    public void escribirMenu() {
+        System.out.println("0. Finalizar");
+        System.out.println("1. Reservar máquina");
+        System.out.println("2. Más reservas");
+        System.out.println("3. Cargar máquinas desde fichero");
+        System.out.println("4. Guardar información de las máquinas en fichero");
+        System.out.println("5. Mostrar información de las máquinas");
+        System.out.println("6. Ordenar las máquinas por nombre");
+        System.out.println("7. Eliminar máquinas por años");
+        System.out.println("8. Otra opción");
+    }
 }
