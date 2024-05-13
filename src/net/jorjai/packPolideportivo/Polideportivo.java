@@ -194,6 +194,77 @@ public class Polideportivo {
 	}
 
 	/**
+	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
+	 */
+	public void leerMaquinasDeArchivo() {
+		String rutaArchivo = JOptionPane.showInputDialog
+				("Introduce la ruta del archivo de máquinas:","data/maquinas.txt");
+		if (rutaArchivo == null) {
+			System.out.println("No se ha introducido ninguna ruta.");
+            return;
+        }
+
+		File archivo = new File(rutaArchivo);
+		try {
+            Scanner scanner = new Scanner(archivo);
+			while (scanner.hasNextLine()) {
+				String linea = scanner.nextLine();
+				if (!linea.startsWith("//") && !linea.isBlank()) {	// Ignorar líneas en blanco o comentarios
+					String[] args = linea.split("#");
+					MaquinaFitness maquina = null;	// Nombre y años de antigüedad
+					try {
+						maquina = new MaquinaFitness(args[0], Integer.parseInt(args[2]));
+						maquina.setTipo(args[1]);	// Tipo de máquina
+					} catch (ArrayIndexOutOfBoundsException e) {
+						System.out.println("Error en el formato del archivo.");
+					} catch (NumberFormatException e) {
+						System.out.println("Error en el formato de los años de antigüedad.");
+					} catch (IllegalArgumentException e) {
+						System.out.println(e.getMessage());
+					}
+					registrarMaquina(maquina);
+				}
+			}
+        } catch (FileNotFoundException e) {
+			System.out.println("No se ha encontrado el archivo.");
+        }
+    }
+
+	/**
+	 * Guarda las máquinas del Polideportivo en un archivo.
+	 * El archivo se guardará en la carpeta data con el nombre de la fecha actual en formato básico ISO.
+	 */
+	public void guardarArchivo() {
+		String rutaArchivo = JOptionPane.showInputDialog
+				("Introduce la ruta del archivo de máquinas:","maquinas.txt");
+		if (rutaArchivo == null) {
+			System.out.println("No se ha introducido ninguna ruta.");
+			return;
+		}
+		LocalDate fecha = LocalDate.now();
+
+		File archivo = new File(
+				"data/" + fecha.format(DateTimeFormatter.BASIC_ISO_DATE)+"/" + rutaArchivo);
+        try {
+			boolean yaExiste = !archivo.createNewFile();
+			if (yaExiste) {
+				JOptionPane.showMessageDialog(null, "El archivo ya existe.");
+				guardarArchivo();
+            } else {
+				FileWriter fw = new FileWriter(archivo);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter out = new PrintWriter(bw);
+				for (MaquinaFitness maquina : listaMaquinas) {
+					out.println(maquina);
+				}
+
+			}
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+	/**
 	 * Devuelve la lista de Instalaciones del Polideportivo.
 	 * @return Lista de Instalaciones del Polideportivo.
 	 */
