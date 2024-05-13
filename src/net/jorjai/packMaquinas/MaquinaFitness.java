@@ -1,5 +1,7 @@
 package net.jorjai.packMaquinas;
 
+import net.jorjai.packInfo.ReservaException;
+
 /** Clase que simula una máquina de fitness. */
 public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
@@ -49,8 +51,10 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
 	 * 
 	 * @param hora Hora a reservar.
 	 * @return true si se ha podido realizar la reserva correctamente.
+     * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+     * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-    public boolean reservar(int hora) {
+    public boolean reservar(int hora) throws IllegalArgumentException, ReservaException {
         return tablaReservas.reservar(hora);
     }
 

@@ -1,5 +1,6 @@
 package net.jorjai.packPolideportivo;
 
+import net.jorjai.packInfo.ReservaException;
 import net.jorjai.packInstalaciones.Acondicionable;
 import net.jorjai.packInstalaciones.Fronton;
 import net.jorjai.packInstalaciones.Instalacion;
@@ -91,13 +92,17 @@ public class Polideportivo {
 	 *
 	 * @param tipo Tipo de máquina.
 	 * @param hora Hora a la que reservar la máquina.
+	 * @return true si se ha podido realizar la reserva correctamente.
+	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+	 * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-	public void reservarMaquina(String tipo, int hora) {
+	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException, ReservaException {
 		MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
 		if (maquina == null) {
 			System.out.println("No hay máquinas de tipo " + tipo + " libres a la hora " + hora);
+			return false;
 		} else {
-			maquina.reservar(hora);
+			return maquina.reservar(hora);
 		}
 	}
 
