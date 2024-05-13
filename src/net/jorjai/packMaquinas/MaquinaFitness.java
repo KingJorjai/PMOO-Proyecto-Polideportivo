@@ -1,11 +1,17 @@
 package net.jorjai.packMaquinas;
 
-/** Clase que simula una máquina de fitness. */
-public class MaquinaFitness {
+import net.jorjai.packInfo.ReservaException;
 
+/** Clase que simula una máquina de fitness. */
+public class MaquinaFitness implements Comparable<MaquinaFitness> {
+
+    /** Nombre de la máquina. */
 	private String nombre;
+    /** Tipo de la máquina. */
     private String tipo;
+    /** Años de antigüedad de la máquina. */
     private int anios;
+    /** Tabla de reservas de la máquina. */
     private TablaReservas tablaReservas;
 
     /**
@@ -13,8 +19,8 @@ public class MaquinaFitness {
      * @param nombre Nombre de la máquina.
      */
     public MaquinaFitness(String nombre) {
-        this.nombre = nombre;
-        this.anios = 0;
+        setNombre(nombre);
+        setAnios(0);
         this.tablaReservas = new TablaReservas();
     }
 
@@ -45,14 +51,24 @@ public class MaquinaFitness {
 	 * 
 	 * @param hora Hora a reservar.
 	 * @return true si se ha podido realizar la reserva correctamente.
+     * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+     * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-    public boolean reservar(int hora) {
+    public boolean reservar(int hora) throws IllegalArgumentException, ReservaException {
         return tablaReservas.reservar(hora);
     }
 
-    public void setAnios(int anios) {
+    /**
+     * Establece los años de antigüedad de la máquina.
+     * @param anios Años de antigüedad de la máquina.
+     * @throws IllegalArgumentException Si los años de antigüedad no están entre 0 y 20, ambos incluidos.
+     */
+    public void setAnios(int anios) throws IllegalArgumentException {
         if (anios >= 0 && anios <= 20) {
             this.anios = anios;
+        }
+        else {
+            throw new IllegalArgumentException("Los años de antigüedad de la máquina deben estar entre 0 y 20.");
         }
     }
 
@@ -62,6 +78,10 @@ public class MaquinaFitness {
      * @return true si las máquinas son iguales.
      */
     public boolean equals(MaquinaFitness maquina) {
+        if (maquina == null)
+            return false;
+        if (this == maquina)
+            return true;
         return this.nombre.equals(maquina.nombre);
     }
 
@@ -130,5 +150,10 @@ public class MaquinaFitness {
 	 */
     public void setTablaReservas(TablaReservas tablaReservas) {
         this.tablaReservas = tablaReservas;
+    }
+
+    @Override
+    public int compareTo(MaquinaFitness o) {
+        return this.nombre.compareTo(o.nombre);
     }
 }
