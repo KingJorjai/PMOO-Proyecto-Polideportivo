@@ -1,0 +1,10 @@
+// Cada línea del fichero contiene información de una máquina
+// representada con el siguiente formato:
+// nombre#tipo#años
+
+Elip3000#Elíptica#3
+BiciPro#Bicicleta estática#10
+CintaAndar#Cinta de correr#15
+MacPole#Máquina de poleas#2
+MegaClimber#Escaladora#0
+UltraAbs#Banco de abdominales#1
