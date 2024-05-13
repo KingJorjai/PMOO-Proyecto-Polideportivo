@@ -1,4 +1,4 @@
-package net.jorjai.packPolideportivo;public class PolideportivoMenu {
+package net.jorjai.packPolideportivo;
 
 import java.io.IOException;
 import java.util.Scanner;

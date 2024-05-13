@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7abb223d-c569-46f7-ad3b-45badd909115" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/Polideportivo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/Polideportivo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/PolideportivoMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/jorjai/packPolideportivo/PolideportivoMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +56,7 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/class/Polideportivo&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/class/PolideportivoMenu&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
