@@ -3,9 +3,13 @@ package net.jorjai.packMaquinas;
 /** Clase que simula una máquina de fitness. */
 public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
+    /** Nombre de la máquina. */
 	private String nombre;
+    /** Tipo de la máquina. */
     private String tipo;
+    /** Años de antigüedad de la máquina. */
     private int anios;
+    /** Tabla de reservas de la máquina. */
     private TablaReservas tablaReservas;
 
     /**
