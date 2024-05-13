@@ -17,8 +17,8 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
      * @param nombre Nombre de la máquina.
      */
     public MaquinaFitness(String nombre) {
-        this.nombre = nombre;
-        this.anios = 0;
+        setNombre(nombre);
+        setAnios(0);
         this.tablaReservas = new TablaReservas();
     }
 
@@ -54,9 +54,17 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
         return tablaReservas.reservar(hora);
     }
 
-    public void setAnios(int anios) {
+    /**
+     * Establece los años de antigüedad de la máquina.
+     * @param anios Años de antigüedad de la máquina.
+     * @throws IllegalArgumentException Si los años de antigüedad no están entre 0 y 20, ambos incluidos.
+     */
+    public void setAnios(int anios) throws IllegalArgumentException {
         if (anios >= 0 && anios <= 20) {
             this.anios = anios;
+        }
+        else {
+            throw new IllegalArgumentException("Los años de antigüedad de la máquina deben estar entre 0 y 20.");
         }
     }
 
