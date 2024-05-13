@@ -202,10 +202,17 @@ public class Polideportivo {
 			System.out.println("No se ha introducido ninguna ruta.");
             return;
         }
-
 		File archivo = new File(rutaArchivo);
+		cargarMaquinas(archivo);
+    }
+
+	/**
+	 * Carga las máquinas de un archivo y las añade al Polideportivo.
+	 * @param archivo Archivo con las máquinas a cargar.
+	 */
+	public void cargarMaquinas(File archivo) {
 		try {
-            Scanner scanner = new Scanner(archivo);
+			Scanner scanner = new Scanner(archivo);
 			while (scanner.hasNextLine()) {
 				String linea = scanner.nextLine();
 				if (!linea.startsWith("//") && !linea.isBlank()) {	// Ignorar líneas en blanco o comentarios
@@ -224,10 +231,10 @@ public class Polideportivo {
 					registrarMaquina(maquina);
 				}
 			}
-        } catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println("No se ha encontrado el archivo.");
-        }
-    }
+		}
+	}
 
 	/**
 	 * Guarda las máquinas del Polideportivo en un archivo.
