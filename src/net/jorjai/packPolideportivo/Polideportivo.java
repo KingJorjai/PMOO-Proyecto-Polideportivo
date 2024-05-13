@@ -6,12 +6,19 @@ import net.jorjai.packInstalaciones.Fronton;
 import net.jorjai.packInstalaciones.Instalacion;
 import net.jorjai.packMaquinas.MaquinaFitness;
 
+import javax.swing.*;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
 /**
  * Clase que simula un polideportivo.
+ *
+ * @author Jorge Arévalo Fernández
  */
 public class Polideportivo {
 
