@@ -47,9 +47,11 @@ public class Polideportivo {
 	 * Registra una máquina en el polideportivo.
 	 *
 	 * @param maquina Máquina a registrar.
+	 * @throws IllegalArgumentException Si la máquina ya está registrada.
 	 */
-	public void registrarMaquina(MaquinaFitness maquina) {
+	public void registrarMaquina(MaquinaFitness maquina) throws IllegalArgumentException {
 		if (!listaMaquinas.contains(maquina)) listaMaquinas.add(maquina);
+		else throw new IllegalArgumentException("La máquina" + maquina + "ya está registrada.");
 	}
 
 	/**
