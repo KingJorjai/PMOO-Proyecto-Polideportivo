@@ -1,4 +1,19 @@
 package net.jorjai.packPolideportivo;public class PolideportivoMenu {
+
+    private Polideportivo polideportivo;
+    private Scanner sc;
+
+    public static void main(String[] args) {
+        PolideportivoMenu poliMenu = new PolideportivoMenu();
+        poliMenu.cargarMaquinasInstalacionesInicial();
+        poliMenu.menu();
+    }
+
+    public PolideportivoMenu() {
+        this.polideportivo = Polideportivo.getInstance();
+        this.sc = new Scanner(System.in);
+    }
+
     public void cargarMaquinasInstalacionesInicial() {
         // Carga de máquinas de fitness
         try {
