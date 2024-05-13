@@ -1,0 +1,20 @@
+// Fronton#nombre#anioConstruccion#cubierto#metrosCuadrados
+
+Fronton#fronton1#2010#true#200
+Fronton#fronton2#2015#false#150
+Fronton#fronton3#2018#true#300
+
+// CampoFutbol#nombre#anioConstruccion#gradas
+CampoFutbol#campo1#2000#true
+CampoFutbol#campo2#2010#false
+CampoFutbol#campo3#2015#true
+
+// Piscina#nombre#longitud#anchura#cloro
+Piscina#piscina1#50#25#22.0
+Piscina#piscina2#25#10#15.0
+Piscina#piscina3#100#50#30.0
+
+// Padel#nombre#longitud#anchura#colorParedes
+Padel#padel1#20#10#azul
+Padel#padel2#30#15#verde
+Padel#padel3#40#20#rojo

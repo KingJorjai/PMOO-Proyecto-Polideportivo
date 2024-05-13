@@ -1,9 +1,8 @@
 package net.jorjai.packPolideportivo;
 
+import net.jorjai.Util;
 import net.jorjai.packInfo.ReservaException;
-import net.jorjai.packInstalaciones.Acondicionable;
-import net.jorjai.packInstalaciones.Fronton;
-import net.jorjai.packInstalaciones.Instalacion;
+import net.jorjai.packInstalaciones.*;
 import net.jorjai.packMaquinas.MaquinaFitness;
 
 import javax.swing.*;
@@ -229,6 +228,24 @@ public class Polideportivo {
 						System.out.println(e.getMessage());
 					}
 					registrarMaquina(maquina);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("No se ha encontrado el archivo.");
+		}
+	}
+
+	public void cargarInstalaciones(File archivo) {
+		try {
+			Scanner scanner = new Scanner(archivo);
+			Instalacion instalacion = null;
+			while (scanner.hasNextLine()) {
+				String linea = scanner.nextLine();
+				if (!linea.startsWith("//") && !linea.isBlank()) {    // Ignorar líneas en blanco o comentarios
+					String[] args = linea.split("#");
+					instalacion = (Instalacion) Util.instanciarClase(
+							args, "net.jorjai.packInstalaciones.");
+					registrarInstalacion(instalacion);
 				}
 			}
 		} catch (FileNotFoundException e) {

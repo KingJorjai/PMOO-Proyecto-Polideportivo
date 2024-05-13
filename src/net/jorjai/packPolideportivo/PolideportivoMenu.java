@@ -21,17 +21,9 @@ public class PolideportivoMenu {
 
     public void cargarMaquinasInstalacionesInicial() {
         // Carga de máquinas de fitness
-        try {
-            polideportivo.cargarMaquinas("maquinasFitness.txt");
-        } catch (IOException e) {
-            System.out.println("Error al cargar las máquinas de fitness: " + e.getMessage());
-        }
+        polideportivo.cargarMaquinas(new File("data/maquinasFitness.txt"));
         // Carga de instalaciones
-        try {
-            polideportivo.cargarInstalaciones("instalaciones.txt");
-        } catch (IOException e) {
-            System.out.println("Error al cargar las instalaciones: " + e.getMessage());
-        }
+        polideportivo.cargarInstalaciones(new File("data/instalaciones.txt"));
     }
 
     public void menu() {
