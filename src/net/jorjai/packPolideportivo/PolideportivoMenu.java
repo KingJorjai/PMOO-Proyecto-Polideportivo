@@ -1,5 +1,10 @@
 package net.jorjai.packPolideportivo;public class PolideportivoMenu {
 
+import java.io.IOException;
+import java.util.Scanner;
+
+public class PolideportivoMenu {
+
     private Polideportivo polideportivo;
     private Scanner sc;
 
