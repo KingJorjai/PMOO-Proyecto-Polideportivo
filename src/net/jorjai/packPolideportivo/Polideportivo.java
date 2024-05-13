@@ -121,7 +121,7 @@ public class Polideportivo {
 	 */
 	public void mostrarInstalaciones() {
 		for (Instalacion instalacion : listaInstalaciones) {
-			System.out.println(instalacion.getNombre() + " - Abre a las " + instalacion.getHoraApertura());
+			System.out.println(instalacion.getNombre() + " - Abre a las " + instalacion.getHoraApertura() + ":00 horas.");
 		}
 	}
 
