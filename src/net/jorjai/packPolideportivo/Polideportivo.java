@@ -1,16 +1,24 @@
 package net.jorjai.packPolideportivo;
 
+import net.jorjai.packInfo.ReservaException;
 import net.jorjai.packInstalaciones.Acondicionable;
 import net.jorjai.packInstalaciones.Fronton;
 import net.jorjai.packInstalaciones.Instalacion;
 import net.jorjai.packMaquinas.MaquinaFitness;
 
+import javax.swing.*;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 
 /**
  * Clase que simula un polideportivo.
+ *
+ * @author Jorge Arévalo Fernández
  */
 public class Polideportivo {
 
@@ -46,9 +54,11 @@ public class Polideportivo {
 	 * Registra una máquina en el polideportivo.
 	 *
 	 * @param maquina Máquina a registrar.
+	 * @throws IllegalArgumentException Si la máquina ya está registrada.
 	 */
-	public void registrarMaquina(MaquinaFitness maquina) {
+	public void registrarMaquina(MaquinaFitness maquina) throws IllegalArgumentException {
 		if (!listaMaquinas.contains(maquina)) listaMaquinas.add(maquina);
+		else throw new IllegalArgumentException("La máquina" + maquina + "ya está registrada.");
 	}
 
 	/**
@@ -74,15 +84,17 @@ public class Polideportivo {
 	 * @param tipo Tipo de máquina.
 	 * @param hora Hora a la que debe estar libre la máquina.
 	 * @return Primera máquina del tipo dado, disponible a la hora indicada o null si no hay ninguna.
+	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+	 * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
-	public MaquinaFitness getMaquinaLibre(String tipo, int hora) {
+	public MaquinaFitness getMaquinaLibre(String tipo, int hora) throws IllegalArgumentException, ReservaException {
 
 		for (MaquinaFitness maquina : listaMaquinas) {
 			if (maquina.getTipo().equals(tipo) && maquina.estaLibre(hora)) {
 				return maquina;
 			}
 		}
-		return null;
+		throw new ReservaException("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
 	}
 
 	/**
@@ -91,13 +103,16 @@ public class Polideportivo {
 	 *
 	 * @param tipo Tipo de máquina.
 	 * @param hora Hora a la que reservar la máquina.
+	 * @return true si se ha podido realizar la reserva correctamente.
+	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
 	 */
-	public void reservarMaquina(String tipo, int hora) {
+	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException {
 		MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
-		if (maquina == null) {
-			System.out.println("No hay máquinas de tipo " + tipo + " libres a la hora " + hora);
-		} else {
-			maquina.reservar(hora);
+		try{
+			return maquina.reservar(hora);
+		} catch (ReservaException e) {
+			System.out.println("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
+			return false;
 		}
 	}
 
@@ -106,7 +121,7 @@ public class Polideportivo {
 	 */
 	public void mostrarInstalaciones() {
 		for (Instalacion instalacion : listaInstalaciones) {
-			System.out.println(instalacion.getNombre() + " - Abre a las " + instalacion.getHoraApertura());
+			System.out.println(instalacion.getNombre() + " - Abre a las " + instalacion.getHoraApertura() + ":00 horas.");
 		}
 	}
 
@@ -176,6 +191,77 @@ public class Polideportivo {
 		}
 		return contador;
 	}
+
+	/**
+	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
+	 */
+	public void leerMaquinasDeArchivo() {
+		String rutaArchivo = JOptionPane.showInputDialog
+				("Introduce la ruta del archivo de máquinas:","data/maquinas.txt");
+		if (rutaArchivo == null) {
+			System.out.println("No se ha introducido ninguna ruta.");
+            return;
+        }
+
+		File archivo = new File(rutaArchivo);
+		try {
+            Scanner scanner = new Scanner(archivo);
+			while (scanner.hasNextLine()) {
+				String linea = scanner.nextLine();
+				if (!linea.startsWith("//") && !linea.isBlank()) {	// Ignorar líneas en blanco o comentarios
+					String[] args = linea.split("#");
+					MaquinaFitness maquina = null;	// Nombre y años de antigüedad
+					try {
+						maquina = new MaquinaFitness(args[0], Integer.parseInt(args[2]));
+						maquina.setTipo(args[1]);	// Tipo de máquina
+					} catch (ArrayIndexOutOfBoundsException e) {
+						System.out.println("Error en el formato del archivo.");
+					} catch (NumberFormatException e) {
+						System.out.println("Error en el formato de los años de antigüedad.");
+					} catch (IllegalArgumentException e) {
+						System.out.println(e.getMessage());
+					}
+					registrarMaquina(maquina);
+				}
+			}
+        } catch (FileNotFoundException e) {
+			System.out.println("No se ha encontrado el archivo.");
+        }
+    }
+
+	/**
+	 * Guarda las máquinas del Polideportivo en un archivo.
+	 * El archivo se guardará en la carpeta data con el nombre de la fecha actual en formato básico ISO.
+	 */
+	public void guardarArchivo() {
+		String rutaArchivo = JOptionPane.showInputDialog
+				("Introduce la ruta del archivo de máquinas:","maquinas.txt");
+		if (rutaArchivo == null) {
+			System.out.println("No se ha introducido ninguna ruta.");
+			return;
+		}
+		LocalDate fecha = LocalDate.now();
+
+		File archivo = new File(
+				"data/" + fecha.format(DateTimeFormatter.BASIC_ISO_DATE)+"/" + rutaArchivo);
+        try {
+			boolean yaExiste = !archivo.createNewFile();
+			if (yaExiste) {
+				JOptionPane.showMessageDialog(null, "El archivo ya existe.");
+				guardarArchivo();
+            } else {
+				FileWriter fw = new FileWriter(archivo);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter out = new PrintWriter(bw);
+				for (MaquinaFitness maquina : listaMaquinas) {
+					out.println(maquina);
+				}
+
+			}
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	/**
 	 * Devuelve la lista de Instalaciones del Polideportivo.
