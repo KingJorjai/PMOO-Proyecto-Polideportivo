@@ -195,14 +195,17 @@ public class Polideportivo {
 	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
 	 */
 	public void leerMaquinasDeArchivo() {
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
 		String rutaArchivo = JOptionPane.showInputDialog
-				("Introduce la ruta del archivo de máquinas:","data/maquinas.txt");
+				(jf,"Introduce la ruta del archivo de máquinas:","data/maquinas.txt");
 		if (rutaArchivo == null) {
 			System.out.println("No se ha introducido ninguna ruta.");
             return;
         }
 		File archivo = new File(rutaArchivo);
 		cargarMaquinas(archivo);
+		System.out.println("Máquinas cargadas correctamente.");
     }
 
 	/**

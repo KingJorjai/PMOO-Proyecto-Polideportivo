@@ -44,9 +44,9 @@ public class PolideportivoMenu {
                 case 2:
                     masReservas();
                     break;
-//                case 3:
-//                    cargarMaquinas();
-//                    break;
+                case 3:
+                    cargarMaquinas();
+                    break;
 //                case 4:
 //                    guardarMaquinas();
 //                    break;
@@ -71,6 +71,10 @@ public class PolideportivoMenu {
             }
         } while (opcion != 0);
         sc.close();
+    }
+
+    private void cargarMaquinas() {
+        polideportivo.leerMaquinasDeArchivo();
     }
 
     private void masReservas() {
