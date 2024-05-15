@@ -1,4 +1,4 @@
-package net.jorjai;
+package net.jorjai.packUtil;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
