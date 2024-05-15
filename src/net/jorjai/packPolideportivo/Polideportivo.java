@@ -1,6 +1,6 @@
 package net.jorjai.packPolideportivo;
 
-import net.jorjai.Util;
+import net.jorjai.packUtil.Util;
 import net.jorjai.packInfo.ReservaException;
 import net.jorjai.packInstalaciones.*;
 import net.jorjai.packMaquinas.MaquinaFitness;
@@ -22,17 +22,19 @@ import java.util.Scanner;
 public class Polideportivo {
 
 	private static Polideportivo instance = null;
+
+	private String nombre;
+
 	private ArrayList<Instalacion> listaInstalaciones;
 	private ArrayList<MaquinaFitness> listaMaquinas;
-	
 	private Polideportivo() {
 		listaInstalaciones = new ArrayList<Instalacion>();
 		listaMaquinas = new ArrayList<MaquinaFitness>();
 	}
-	
+
 	/**
 	 * Devuelve la instancia de la clase Polideportivo.
-	 * 
+	 *
 	 * @return Instancia de la clase Polideportivo.
 	 */
 	public static Polideportivo getInstance() {
@@ -322,4 +324,11 @@ public class Polideportivo {
 		this.listaMaquinas = listaMaquinas;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 }
