@@ -1,7 +1,15 @@
 package net.jorjai.packInstalaciones;
 
-/* Clase que simula una instalación deportiva al aire libre. */
+import net.jorjai.packUtil.ConsoleColors;
+
+/**
+ * Clase que simula una instalación deportiva al aire libre.
+ * Almacena información sobre el año de construcción de la instalación.
+ *
+ * @author Jorge Arévalo Fernández
+ */
 public abstract class Exterior extends Instalacion {
+	/** Año de construcción de la instalación. */
 	private int anioConstruccion;
 
 	/**
@@ -12,7 +20,7 @@ public abstract class Exterior extends Instalacion {
 	 */
 	public Exterior(String nombre, int anioConstruccion) {
 		super(nombre);
-		this.anioConstruccion = anioConstruccion;
+		setAnioConstruccion(anioConstruccion);
 	}
 
 	/**
@@ -34,25 +42,29 @@ public abstract class Exterior extends Instalacion {
 	}
 
 	@Override
-	public String inheritancePath() {
-		return "Instalacion#Exterior";
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Exterior e)) return false;
+		return super.equals(e) && e.getAnioConstruccion() == getAnioConstruccion();
 	}
 
 	@Override
-	public void printInheritancePath() {
-		System.out.println(inheritancePath());
+	public String toString() {
+		return "Exterior#%s#%s".formatted(getNombre(), getAnioConstruccion());
 	}
 
-	/**
-     * Actualiza los horarios de apertura y cierre de la instalación.
-     * 
-     * @param horaApertura Hora de apertura de la instalación.
-     * @param horaCierre   Hora de cierre de la instalación.
-     */
-	public void actualizarHorarios(int horaApertura, int horaCierre) {
-		if (horaCierre > horaApertura) {
-			setHoraApertura(horaApertura);
-			setHoraCierre(horaCierre);
-		}
+	@Override
+	public String inheritancePath() {
+		return super.inheritancePath()+ " -> Exterior";
+	}
+
+	@Override
+	public void mostrarInfoDetallada(){
+		String formato = "%28s";
+		super.mostrarInfoDetallada();
+		System.out.println(ConsoleColors.CYAN_BOLD +
+				String.format(formato, "Año construcción: ") + ConsoleColors.RESET + this.getAnioConstruccion()
+		);
 	}
 }

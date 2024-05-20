@@ -1,8 +1,15 @@
 package net.jorjai.packMaquinas;
 
 import net.jorjai.packInfo.ReservaException;
+import net.jorjai.packUtil.ConsoleColors;
 
-/** Clase que simula una máquina de fitness. */
+/**
+ * Clase que simula una máquina de fitness.
+ * <p> Almacena información sobre el nombre, el tipo y los años de antigüedad de la máquina.
+ * Además, almacena una tabla de reservas de la máquina.
+ *
+ * @author Jorge Arévalo Fernández
+ */
 public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
     /** Nombre de la máquina. */
@@ -16,12 +23,11 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
     /**
      * Constructor de la clase MaquinaFitness.
+     * Por defecto, la máquina tiene {@code 0} años de antigüedad.
      * @param nombre Nombre de la máquina.
      */
     public MaquinaFitness(String nombre) {
-        setNombre(nombre);
-        setAnios(0);
-        this.tablaReservas = new TablaReservas();
+        this(nombre, 0);
     }
 
 	/**
@@ -49,7 +55,7 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
 
 	/**
 	 * Dada una hora, si la máquina está libre a dicha hora, la reserva.
-	 * 
+	 *
 	 * @param hora Hora a reservar.
 	 * @return true si se ha podido realizar la reserva correctamente.
      * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
@@ -89,6 +95,24 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
     @Override
     public String toString() {
         return nombre + "#" + tipo + "#" + anios;
+    }
+
+    /**
+     * Muestra toda la información disponible de la máquina.
+     */
+    public void mostrarInfoDetallada(){
+        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + String.format("%10s","Nombre: ") + ConsoleColors.RESET + nombre);
+        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + String.format("%10s","Tipo: ") + ConsoleColors.RESET + tipo);
+        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + String.format("%10s","Años: ") + ConsoleColors.RESET + anios);
+        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + String.format("%10s","Reservas: ") + ConsoleColors.RESET);
+        mostrarTablaReservas();
+    }
+
+	/**
+	 * Muestra la tabla de reservas de la máquina.
+	 */
+    public void mostrarTablaReservas(){
+        tablaReservas.mostrarTabla(3);
     }
 
 	/**
@@ -156,5 +180,20 @@ public class MaquinaFitness implements Comparable<MaquinaFitness> {
     @Override
     public int compareTo(MaquinaFitness o) {
         return this.nombre.compareTo(o.nombre);
+    }
+
+    /**
+     * Borra una reserva de la máquina.
+     * @param hora Número de la hora a borrar.
+     * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+     * @throws ReservaException Si no hay ninguna reserva a la hora indicada.
+     */
+    public void borrarReserva(int hora) throws IllegalArgumentException, ReservaException{
+        try {
+            tablaReservas.borrarReserva(hora);
+        } catch (ReservaException e) {
+            throw new ReservaException("La máquina " + nombre + " no estaba reservada a las " +
+                    String.format("%02d",hora) + ":00.");
+        }
     }
 }

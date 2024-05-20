@@ -1,0 +1,44 @@
+// El formato de los ficheros de datos es el siguiente:
+// TipoInstalacion#atributo1#atributo2#atributo3#...#atributoN
+// Estando los atributos en el mismo orden que en el constructor de la clase correspondiente.
+
+// Clases que deberían dar error al intentar instanciarlas:
+ClaseQueNoExiste#atributo1#atributo2#atributo3
+Fronton#frontonX#NoSePuedeConvertirAEntero#true#200
+CampoFutbol#campoX#2000#NoSePuedeConvertirABooleano
+Piscina#piscinaX#50#25#NoSePuedeConvertirAFloat
+Padel#padelX#20#10#azul#atributoExtra
+CampoVoleibol#voleibolX#-10
+Fronton#FaltanAtributos
+Interior#EsClaseAbstractaX#10#20
+CampoFutbol#campoX#2000#true    // Los comentarios en línea no están permitidos y se interpretan como parte del atributo
+
+// Fronton#nombre#anioConstruccion#(cubierto)#metrosCuadrados
+Fronton#fronton1#2010#true#200
+Fronton#fronton2#2015#false#150
+Fronton#fronton3#2018#300
+
+// CampoFutbol#nombre#anioConstruccion#gradas
+CampoFutbol#campo1#2000#true
+CampoFutbol#campo2#2010#false
+CampoFutbol#campo3#2015#true
+
+// Piscina#nombre#longitud#anchura#cloro
+Piscina#piscina1#50#25#22.0
+Piscina#piscina2#25#10#15.0
+Piscina#piscina3#100#50#30.0
+
+// Padel#nombre#longitud#anchura#colorParedes
+Padel#padel1#20#10#azul
+Padel#padel2#30#15#verde
+Padel#padel3#40#20#rojo
+
+// CampoVoleibol#nombre#alturaRed#(varillas)
+CampoVoleibol#voleibol1#243
+CampoVoleibol#voleibol2#237#true
+CampoVoleibol#voleibol3#210#false
+
+// ArtesMarciales#nombre#longitud#anchura#tatamis#(ring)    tatami: 10x10 metros
+ArtesMarciales#artesMarciales1#20#10#2
+ArtesMarciales#artesMarciales2#30#15#2#true
+ArtesMarciales#artesMarciales3#40#20#8#false

@@ -1,10 +1,18 @@
 package net.jorjai.packInstalaciones;
 
+import net.jorjai.packUtil.ConsoleColors;
+
 /**
- * Clase que simula una pista de Padel.
+ * Clase que simula una pista de Padel. Tiene como atributo el color de las
+ * paredes de la pista. Por defecto, permite practicar los deportes de {@code Padel
+ * dobles}, {@code Padel individual} y {@code Padel cruzado}.
+ *
+ * @author Jorge Arévalo Fernández
  */
 public class Padel extends Interior implements Acondicionable {
+	/** Color de las paredes de la pista de Padel. */
 	private String colorParedes;
+	/** Precio del acondicionamiento unitario de la pista de Padel. */
 	private double precioAcondicionamientoUnitario;
 
 	/**
@@ -17,7 +25,10 @@ public class Padel extends Interior implements Acondicionable {
 	 */
 	public Padel(String nombre, int longitud, int anchura, String colorParedes) {
 		super(nombre, longitud, anchura);
-		this.colorParedes = colorParedes;
+		setColorParedes(colorParedes);
+		addDeporte("Padel dobles");
+		addDeporte("Padel individual");
+		addDeporte("Padel cruzado");
 		
 	}
 
@@ -26,18 +37,31 @@ public class Padel extends Interior implements Acondicionable {
 	}
 
 	@Override
-	public double precioAlquiler() {
-		return 40;
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Padel p)) return false;
+		return super.equals(p) && p.getColorParedes().equals(getColorParedes());
 	}
 
 	@Override
+	public String toString() {
+		return "Padel#%s#%s#%s#%s".formatted(getNombre(), getLongitud(), getAnchura(), getColorParedes());
+	}
+
+    @Override
 	public String inheritancePath() {
 		return super.inheritancePath() + " -> Padel";
 	}
 
 	@Override
-	public void printInheritancePath() {
-		System.out.println(inheritancePath());
+	public void mostrarInfoDetallada() {
+		String formato = "%28s";
+
+		super.mostrarInfoDetallada();
+		System.out.println(ConsoleColors.CYAN_BOLD +
+				String.format(formato, "Color de las paredes: ") + ConsoleColors.RESET + this.getColorParedes()
+		);
 	}
 
 	/**
@@ -48,12 +72,7 @@ public class Padel extends Interior implements Acondicionable {
 		return precioAcondicionamientoUnitario;
 	}
 
-	/**
-	 * Establece el precio del acondicionamiento unitario de la pista de Padel.
-	 * 
-	 * @param precioAcondicionamientoUnitario Precio del acondicionamiento unitario
-	 *                                        de la pista de Padel.
-	 */
+	@Override
 	public void setPrecioAcondicionamientoUnitario(double precioAcondicionamientoUnitario) {
 		this.precioAcondicionamientoUnitario = precioAcondicionamientoUnitario;
 	}
