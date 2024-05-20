@@ -1,9 +1,19 @@
 package net.jorjai.packInstalaciones;
 
+import net.jorjai.packUtil.ConsoleColors;
+
+import java.time.Year;
+
 /**
- * Clase que simula un campo de fútbol.
+ * Clase que simula un campo de fútbol. Almacena información sobre si tiene
+ * gradas o no.
+ *
+ * @author Jorge Arévalo Fernández
  */
 public class CampoFutbol extends Exterior {
+	/**
+	 * Indica si el campo de fútbol tiene gradas.
+     */
 	private boolean gradas;
 
 	/**
@@ -15,17 +25,35 @@ public class CampoFutbol extends Exterior {
 	 */
 	public CampoFutbol(String nombre, int anioConstruccion, boolean gradas) {
 		super(nombre, anioConstruccion);
-		this.gradas = gradas;
+		setGradas(gradas);
+	}
+
+	@Override
+	public String toString() {
+		return "CampoFutbol#%s#%s#%s".formatted(getNombre(), getAnioConstruccion(), hasGradas());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof CampoFutbol c)) return false;
+		return super.equals(c) && c.hasGradas() == hasGradas();
 	}
 
 	@Override
 	public String inheritancePath() {
-		return super.inheritancePath() + "#CampoFutbol";
+		return super.inheritancePath() + " -> CampoFutbol";
 	}
 
 	@Override
-	public void printInheritancePath() {
-		System.out.println(inheritancePath());
+	public void mostrarInfoDetallada() {
+		String formato = "%28s";
+
+		super.mostrarInfoDetallada();
+		System.out.println(ConsoleColors.CYAN_BOLD +
+				String.format(formato, "Gradas: ") + ConsoleColors.RESET + (this.hasGradas() ? "Sí" : "No")
+		);
 	}
 
 	/**
@@ -33,7 +61,7 @@ public class CampoFutbol extends Exterior {
 	 * 
 	 * @return true si el campo de fútbol tiene gradas, false en caso contrario.
 	 */
-	public boolean getGradas() {
+	public boolean hasGradas() {
 		return gradas;
 	}
 
@@ -45,6 +73,11 @@ public class CampoFutbol extends Exterior {
 	 */
 	public void setGradas(boolean gradas) {
 		this.gradas = gradas;
+	}
+
+	@Override
+	public double precioAlquiler() {
+		return (40 - (Year.now().getValue() - getAnioConstruccion()))*3;
 	}
 
 }

@@ -1,15 +1,31 @@
 package net.jorjai.packInstalaciones;
 
+import net.jorjai.packUtil.ConsoleColors;
+
 /**
- * Clase que simula un frontón.
+ * Clase que simula un frontón. Almacena información sobre si es cubierto o no.
+ * Además, almacena los metros cuadrados del frontón.
+ *
+ * @author Jorge Arévalo Fernández
  */
 public class Fronton extends Exterior implements Acondicionable {
+	/**
+	 * Indica si el frontón es cubierto.
+	 */
     private boolean cubierto;
+    
+	/**
+	 * Metros cuadrados del frontón.
+	 */
     private int metrosCuadrados;
+    
+    /**
+     * Precio del acondicionamiento unitario de la pista de Padel.
+     */
     private double precioAcondicionamientoUnitario;
 
     /**
-     * Constructor de la clase Fronton
+     * Constructor de la clase Fronton.
      * 
      * @param nombre           Nombre del frontón.
      * @param anioConstruccion Año de construcción del frontón.
@@ -18,39 +34,67 @@ public class Fronton extends Exterior implements Acondicionable {
      */
     public Fronton(String nombre, int anioConstruccion, boolean cubierto, int metrosCuadrados) {
         super(nombre, anioConstruccion);
-        this.cubierto = cubierto;
-        this.metrosCuadrados = metrosCuadrados;
+        setCubierto(cubierto);
+        setMetrosCuadrados(metrosCuadrados);
     }
+
+	/**
+	 * Constructor de la clase Fronton. Por defecto, el frontón no está cubierto.
+	 * 
+	 * @param nombre           Nombre del frontón.
+	 * @param anioConstruccion Año de construcción del frontón.
+	 * @param metrosCuadrados  Metros cuadrados del frontón.
+	 */
+	public Fronton(String nombre, int anioConstruccion, int metrosCuadrados) {
+		this(nombre, anioConstruccion, false, metrosCuadrados);
+	}
+
+	@Override
+	public String toString() {
+		return "Fronton#%s#%s#%s#%s".formatted(
+				getNombre(), getAnioConstruccion(), isCubierto(), getMetrosCuadrados());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Fronton f)) return false;
+        return super.equals(f) && f.isCubierto() == isCubierto() && f.getMetrosCuadrados() == getMetrosCuadrados();
+	}
 
     @Override
     public String inheritancePath() {
-        return super.inheritancePath() + "#Fronton";
-    }
-
-    @Override
-    public void printInheritancePath() {
-        System.out.println(inheritancePath());
+        return super.inheritancePath() + " -> Fronton";
     }
 
     @Override
     public double precioAlquiler() {
-        return precioAcondicionamientoUnitario * metrosCuadrados + (cubierto ? 20 : 0);
+        return 2 * metrosCuadrados + (cubierto ? 20 : 0);
     }
 
-    /**
-	 * Actualiza los horarios de apertura y cierre del frontón.
-	 *
-	 * @param horaApertura Hora de apertura del frontón.
-	 * @param horaCierre   Hora de cierre del frontón.
-	 */
-        public void actualizarHorarios(int horaApertura, int horaCierre) {
-        	            if (horaCierre > horaApertura && horaCierre <= 22) {
-                setHoraApertura(horaApertura);
-                setHoraCierre(horaCierre);
-            } else {
-                System.out.println("Error: Los horarios no son correctos.");
-            }
-        }
+    @Override
+	public void actualizarHorarios(int horaApertura, int horaCierre) throws IllegalArgumentException {
+		if (horaCierre > 22) {
+			throw new IllegalArgumentException(
+					"Los frontones no pueden cerrar más tarde de las 22:00 horas.");
+		} else {
+			super.actualizarHorarios(horaApertura, horaCierre);
+		}
+	}
+
+	@Override
+	public void mostrarInfoDetallada() {
+		String formato = "%28s";
+
+		super.mostrarInfoDetallada();
+		System.out.println(ConsoleColors.CYAN_BOLD +
+				String.format(formato, "Cubierto: ") + ConsoleColors.RESET + (this.isCubierto() ? "Sí" : "No")
+		);
+		System.out.println(ConsoleColors.CYAN_BOLD +
+				String.format(formato, "Metros cuadrados: ") + ConsoleColors.RESET + (this.getMetrosCuadrados())
+		);
+	}
 
 	@Override
 	public double getPrecioAcondicionamiento() {
