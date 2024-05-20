@@ -1,5 +1,6 @@
 package net.jorjai.packPolideportivo;
 
+import net.jorjai.packUtil.ConsoleColors;
 import net.jorjai.packUtil.Util;
 import net.jorjai.packInfo.ReservaException;
 import net.jorjai.packInstalaciones.*;
@@ -8,6 +9,7 @@ import net.jorjai.packMaquinas.MaquinaFitness;
 import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,15 +23,32 @@ import java.util.Scanner;
  */
 public class Polideportivo {
 
+	/**
+	 * Instancia única de la clase Polideportivo.
+	 */
 	private static Polideportivo instance = null;
 
+	/**
+	 * Nombre del Polideportivo.
+	 */
 	private String nombre;
 
+	/**
+	 * Lista de Instalaciones del Polideportivo.
+	 */
 	private ArrayList<Instalacion> listaInstalaciones;
+
+	/**
+	 * Lista de Máquinas del Polideportivo.
+	 */
 	private ArrayList<MaquinaFitness> listaMaquinas;
+
+	/**
+	 * Constructor privado de la clase Polideportivo.
+	 */
 	private Polideportivo() {
-		listaInstalaciones = new ArrayList<Instalacion>();
-		listaMaquinas = new ArrayList<MaquinaFitness>();
+		listaInstalaciones = new ArrayList<>();
+		listaMaquinas = new ArrayList<>();
 	}
 
 	/**
@@ -69,7 +88,7 @@ public class Polideportivo {
 	 * @return ArrayList con los nombres de las máquinas que tengan un número de reservas mayor que el dado.
 	 */
 	public ArrayList<String> masReservas(int numero) {
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<String> resultado = new ArrayList<>();
 		for (MaquinaFitness maquina : listaMaquinas) {
 			if (maquina.getTablaReservas().numeroReservas() > numero) {
 				resultado.add(maquina.getNombre());
@@ -89,13 +108,21 @@ public class Polideportivo {
 	 * @throws ReservaException Si la máquina ya está reservada a la hora indicada.
 	 */
 	public MaquinaFitness getMaquinaLibre(String tipo, int hora) throws IllegalArgumentException, ReservaException {
-
+		boolean maquinaEncontrada=false;
 		for (MaquinaFitness maquina : listaMaquinas) {
-			if (maquina.getTipo().equals(tipo) && maquina.estaLibre(hora)) {
-				return maquina;
+			if (maquina.getTipo().equalsIgnoreCase(tipo)) {
+				maquinaEncontrada=true;
+				if (maquina.estaLibre(hora)) {
+					return maquina;
+				}
 			}
 		}
-		throw new ReservaException("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
+		if (!maquinaEncontrada) {
+			throw new ReservaException("No existe ninguna máquina de tipo " + tipo.toUpperCase() + ".");
+		} else {
+			throw new ReservaException("No hay ninguna máquina de tipo " + tipo.toUpperCase() +
+					" libre a las " + String.format("%02d",hora) + ":00 horas.");
+		}
 	}
 
 	/**
@@ -104,16 +131,15 @@ public class Polideportivo {
 	 *
 	 * @param tipo Tipo de máquina.
 	 * @param hora Hora a la que reservar la máquina.
-	 * @return true si se ha podido realizar la reserva correctamente.
 	 * @throws IllegalArgumentException Si la hora no está comprendida entre 0 y 23, ambas incluidas.
+	 * @throws ReservaException Si no se ha podido realizar la reserva.
 	 */
-	public boolean reservarMaquina(String tipo, int hora) throws IllegalArgumentException {
+	public void reservarMaquina(String tipo, int hora) throws RuntimeException, ReservaException{
 		try{
 			MaquinaFitness maquina = getMaquinaLibre(tipo, hora);
-			return maquina.reservar(hora);
+			maquina.reservar(hora);
 		} catch (ReservaException e) {
-			System.out.println("No hay máquinas de tipo " + tipo + " libres a las " + hora + ":00 horas.");
-			return false;
+			throw new ReservaException(e.getMessage());
 		}
 	}
 
@@ -122,7 +148,14 @@ public class Polideportivo {
 	 */
 	public void mostrarInstalaciones() {
 		for (Instalacion instalacion : listaInstalaciones) {
-			System.out.println(instalacion.getNombre() + " - Abre a las " + instalacion.getHoraApertura() + ":00 horas.");
+			System.out.println(
+					ConsoleColors.CYAN_BOLD_BRIGHT + " - " + ConsoleColors.RESET +
+					instalacion.getNombre() +
+					" (" + instalacion.getClass().getSimpleName() +
+					(instalacion instanceof Acondicionable ? ConsoleColors.CYAN_BRIGHT + "*" + ConsoleColors.RESET : "") + ", " +
+					String.format("%02d",instalacion.getHoraApertura()) + ":00-" +
+					String.format("%02d",instalacion.getHoraCierre()) + ":00)"
+			);
 		}
 	}
 
@@ -169,7 +202,10 @@ public class Polideportivo {
 	 */
 	public void mostrarMaquinas() {
 		for (MaquinaFitness maquina : listaMaquinas) {
-			System.out.println(maquina);
+			System.out.println(
+					ConsoleColors.CYAN_BOLD_BRIGHT + " - " + ConsoleColors.RESET +
+					maquina.getNombre() + " (" + maquina.getTipo() + ", " + maquina.getAnios() + " años)"
+			);
 		}
 	}
 
@@ -195,102 +231,204 @@ public class Polideportivo {
 
 	/**
 	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
+	 * @throws FileNotFoundException Si no se encuentra el archivo.
+	 * @throws RuntimeException Si hay algún error en el formato del archivo.
 	 */
-	public void leerMaquinasDeArchivo() {
+	public void leerMaquinasDeArchivo() throws FileNotFoundException {
 		JFrame jf=new JFrame();
 		jf.setAlwaysOnTop(true);
 		String rutaArchivo = JOptionPane.showInputDialog
-				(jf,"Introduce la ruta del archivo de máquinas:","data/maquinas.txt");
+				(jf,"Introduce la ruta del archivo de máquinas:","data/default/maquinasFitness.txt");
 		if (rutaArchivo == null) {
-			System.out.println("No se ha introducido ninguna ruta.");
-            return;
+			throw new RuntimeException("No se ha introducido ninguna ruta.");
         }
 		File archivo = new File(rutaArchivo);
-		cargarMaquinas(archivo);
-		System.out.println("Máquinas cargadas correctamente.");
+		try {
+			cargarMaquinas(archivo);
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage());
+		}
     }
+
+	/**
+	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
+	 * @throws FileNotFoundException Si no se encuentra el archivo.
+	 * @throws RuntimeException Si hay algún error en el formato del archivo.
+	 */
+	public void leerInstalacionesDeArchivo() throws FileNotFoundException {
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
+		String rutaArchivo = JOptionPane.showInputDialog
+				(jf,"Introduce la ruta del archivo de instalaciones:","data/default/instalaciones.txt");
+		if (rutaArchivo == null) {
+			throw new RuntimeException("No se ha introducido ninguna ruta.");
+		}
+		File archivo = new File(rutaArchivo);
+		try {
+			cargarInstalaciones(archivo);
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
 
 	/**
 	 * Carga las máquinas de un archivo y las añade al Polideportivo.
 	 * @param archivo Archivo con las máquinas a cargar.
+	 * @throws RuntimeException Si hay algún error en el formato del archivo.
+	 * @throws FileNotFoundException Si no se encuentra el archivo.
 	 */
-	public void cargarMaquinas(File archivo) {
+	public void cargarMaquinas(File archivo) throws RuntimeException, FileNotFoundException {
 		try {
 			Scanner scanner = new Scanner(archivo);
 			while (scanner.hasNextLine()) {
 				String linea = scanner.nextLine();
 				if (!linea.startsWith("//") && !linea.isBlank()) {	// Ignorar líneas en blanco o comentarios
 					String[] args = linea.split("#");
-					MaquinaFitness maquina = null;	// Nombre y años de antigüedad
-					try {
-						maquina = new MaquinaFitness(args[0], Integer.parseInt(args[2]));
-						maquina.setTipo(args[1]);	// Tipo de máquina
-					} catch (ArrayIndexOutOfBoundsException e) {
-						System.out.println("Error en el formato del archivo.");
-					} catch (NumberFormatException e) {
-						System.out.println("Error en el formato de los años de antigüedad.");
-					} catch (IllegalArgumentException e) {
-						System.out.println(e.getMessage());
-					}
+					MaquinaFitness maquina = instanciarMaquina(args);
 					registrarMaquina(maquina);
 				}
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("No se ha encontrado el archivo.");
-		}
-	}
-
-	public void cargarInstalaciones(File archivo) {
-		try {
-			Scanner scanner = new Scanner(archivo);
-			Instalacion instalacion = null;
-			while (scanner.hasNextLine()) {
-				String linea = scanner.nextLine();
-				if (!linea.startsWith("//") && !linea.isBlank()) {    // Ignorar líneas en blanco o comentarios
-					String[] args = linea.split("#");
-					instalacion = (Instalacion) Util.instanciarClase(
-							args, "net.jorjai.packInstalaciones.");
-					registrarInstalacion(instalacion);
-				}
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println("No se ha encontrado el archivo.");
+			throw new FileNotFoundException("No se ha encontrado el archivo.");
 		}
 	}
 
 	/**
-	 * Guarda las máquinas del Polideportivo en un archivo.
-	 * El archivo se guardará en la carpeta data con el nombre de la fecha actual en formato básico ISO.
+	 * Instancia una máquina a partir de un array de Strings.
+	 * @param args Array de Strings con los datos de la máquina.
+	 * @return Máquina instanciada.
+	 * @throws RuntimeException Si hay algún error en el formato del archivo.
 	 */
-	public void guardarArchivo() {
-		String rutaArchivo = JOptionPane.showInputDialog
-				("Introduce la ruta del archivo de máquinas:","maquinas.txt");
-		if (rutaArchivo == null) {
-			System.out.println("No se ha introducido ninguna ruta.");
-			return;
+	private static MaquinaFitness instanciarMaquina(String[] args) throws RuntimeException {
+		MaquinaFitness maquina;	// Nombre y años de antigüedad
+		try {
+			maquina = new MaquinaFitness(args[0], Integer.parseInt(args[2]));
+			maquina.setTipo(args[1]);	// Tipo de máquina
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new RuntimeException("Error en el formato del archivo.");
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("Error en el formato de los años de antigüedad.");
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
 		}
+		return maquina;
+	}
+
+	/**
+	 * Lee las instalaciones de un archivo y las añade al Polideportivo.
+	 *
+	 * @param archivo Archivo con las instalaciones a cargar.
+	 * @throws RuntimeException      Si hay algún error en el formato del archivo.
+	 * @throws FileNotFoundException Si no se encuentra el archivo.
+	 */
+	public void cargarInstalaciones(File archivo) throws RuntimeException, FileNotFoundException {
+        Scanner scanner;
+		try {
+			scanner = new Scanner(archivo);
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException("No se ha encontrado el archivo.");
+		}
+		Instalacion instalacion;
+		while (scanner.hasNextLine()) {
+			String linea = scanner.nextLine();
+			if (!linea.startsWith("//") && !linea.isBlank()) {    // Ignorar líneas en blanco o comentarios
+				String[] args = linea.split("#");
+                try {
+                    instalacion = (Instalacion) Util.instanciarClase(
+                            args, "net.jorjai.packInstalaciones");
+					registrarInstalacion(instalacion);
+				} catch (Exception e) {
+                    System.out.println(ConsoleColors.RED_BOLD_BRIGHT + "✘ " + e.getMessage() + ConsoleColors.RESET);
+                }
+
+            }
+		}
+	}
+
+	/**
+	 * Guarda los elementos de una lista en un archivo.
+	 * El archivo se guardará en la carpeta {@code data/yyyy-mm-dd} con el nombre introducido por el usuario.
+	 * El nombre por defecto será el nombre de la clase de los elementos de la lista seguido de la hora actual.
+	 * Si se introduce un nombre no válido, se guardará con el nombre por defecto.
+	 * @throws RuntimeException Si el archivo no se guarda por cualquier motivo.
+	 * @param list Lista de elementos a guardar.
+	 * @param <E> Tipo de elementos de la lista.
+	 * @param prefix Prefijo del nombre del archivo.
+	 */
+	public <E> void guardarArchivo(ArrayList<E> list, String prefix) throws RuntimeException {
+		final String defaultName = prefix + " " +
+				LocalTime.now().format(DateTimeFormatter.ofPattern("HH.mm")) + ".txt";
+		// Pedir datos
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
+		String archivo = JOptionPane.showInputDialog
+				(jf,"Introduce el nombre del archivo a guardar:",
+				 defaultName);
+
+		// Comprobación de la ruta introducida
+		if (archivo == null) {
+			throw new RuntimeException("No se ha introducido ninguna ruta.");
+		} else {
+			// Eliminar todos los carácteres no admitidos para nombres de archivos
+			archivo = archivo.replaceAll("[~\"#%&*:<>?/\\\\{|}]+", "");
+			// Añadir extensión .txt si no la tiene
+			if (archivo.isEmpty()){
+				archivo = defaultName;
+			}
+			if (!archivo.endsWith(".txt")) {
+				archivo = archivo + ".txt";
+			}
+		}
+
+		// Crear directorio
 		LocalDate fecha = LocalDate.now();
+		File ruta = new File("data/" + fecha.format(DateTimeFormatter.ISO_LOCAL_DATE));
+		boolean creado = ruta.mkdir();
 
-		File archivo = new File(
-				"data/" + fecha.format(DateTimeFormatter.BASIC_ISO_DATE)+"/" + rutaArchivo);
-        try {
-			boolean yaExiste = !archivo.createNewFile();
+		// Crear archivo
+		ruta = new File(ruta +"/"+archivo);
+		try {
+			boolean yaExiste = !ruta.createNewFile();
 			if (yaExiste) {
-				JOptionPane.showMessageDialog(null, "El archivo ya existe.");
-				guardarArchivo();
-            } else {
-				FileWriter fw = new FileWriter(archivo);
-				BufferedWriter bw = new BufferedWriter(fw);
-				PrintWriter out = new PrintWriter(bw);
-				for (MaquinaFitness maquina : listaMaquinas) {
-					out.println(maquina);
+				int opcion = JOptionPane.showOptionDialog(
+						jf, "El archivo ya existe. ¿Quieres sobreescribirlo?", "Atención",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+				if (opcion == JOptionPane.YES_OPTION) {
+					if (ruta.delete()) {
+						writeArrayList(list, ruta);
+					} else {
+						throw new RuntimeException("Error al sobreescribir el archivo.");
+					}
+				} else {
+					throw new RuntimeException("No se ha guardado el archivo.");
 				}
-
+            } else {
+				writeArrayList(list, ruta);
 			}
 		} catch (IOException e) {
-            throw new RuntimeException(e);
+			throw new RuntimeException("Ocurrió un error inesperado.");
         }
     }
+
+	/**
+	 * Escribe un ArrayList en un archivo.
+	 * @param list Lista a escribir.
+	 * @param archivo Archivo en el que escribir.
+	 * @param <E> Tipo de elementos de la lista.
+	 * @throws RuntimeException Si hay algún error al escribir en el archivo.
+	 */
+	private <E> void writeArrayList(ArrayList<E> list, File archivo) {
+		try (FileWriter fw = new FileWriter(archivo, false);
+			 BufferedWriter bw = new BufferedWriter(fw);
+			 PrintWriter out = new PrintWriter(bw))
+		{
+			for (E elemento : list) {
+				out.println(elemento);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * Devuelve la lista de Instalaciones del Polideportivo.
@@ -324,11 +462,92 @@ public class Polideportivo {
 		this.listaMaquinas = listaMaquinas;
 	}
 
+	/**
+	 * Devuelve el nombre del Polideportivo.
+	 * @return Nombre del Polideportivo.
+	 */
 	public String getNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Establece el nombre del Polideportivo.
+	 * @param nombre Nombre del Polideportivo.
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	/**
+	 * Borra una instalación de la lista de instalaciones.
+	 * @param instalacion Instalación a borrar.
+	 * @throws InterruptedException Si se cancela el borrado de la instalación.
+	 */
+	public void borrarInstalacion(Instalacion instalacion) throws InterruptedException {
+		// Diálogo de confirmación
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
+		int opcion = JOptionPane.showOptionDialog(
+				jf, "¿Estás seguro de que quieres borrar la instalación " + instalacion.getNombre() + "?",
+				"Confirmación de borrado", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, JOptionPane.NO_OPTION);
+		if (opcion == JOptionPane.YES_OPTION) {
+			listaInstalaciones.remove(instalacion);	// Borrar instalación
+		} else
+			throw new InterruptedException("Se ha cancelado el borrado de la instalación.");
+	}
+
+	/**
+	 * Borra una máquina de la lista de máquinas.
+	 * @param maquinaFitness Máquina a borrar.
+	 * @throws InterruptedException Si se cancela el borrado de la máquina.
+	 */
+	public void borrarMaquina(MaquinaFitness maquinaFitness) throws InterruptedException {
+		// Diálogo de confirmación
+		JFrame jf=new JFrame();
+		jf.setAlwaysOnTop(true);
+		int opcion = JOptionPane.showOptionDialog(
+				jf, "¿Estás seguro de que quieres borrar la máquina " + maquinaFitness.getNombre() + "?",
+				"Confirmación de borrado", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, JOptionPane.NO_OPTION);
+		if (opcion == JOptionPane.YES_OPTION) {
+			listaMaquinas.remove(maquinaFitness);	// Borrar máquina
+		} else {
+			throw new InterruptedException("Se ha cancelado el borrado de la máquina.");
+		}
+	}
+
+	/**
+	 * Ordena ascendentemente según su orden natural (por nombre) las instalaciones
+	 * del Polideportivo.
+	 */
+	public void ordenarInstalaciones() {
+		listaInstalaciones.sort(null);
+	}
+
+	/**
+	 * Guarda las instalaciones en un archivo.
+	 * @throws RuntimeException Si hay algún error al guardar las instalaciones.
+	 */
+	public void guardarInstalaciones() throws RuntimeException {
+		guardarArchivo(getListaInstalaciones(), "Instalaciones");
+	}
+
+	/**
+	 * Guarda las máquinas en un archivo.
+	 * @throws RuntimeException Si hay algún error al guardar las máquinas.
+	 */
+	public void guardarMaquinas() throws RuntimeException {
+		guardarArchivo(getListaMaquinas(),"MaquinasFitness");
+	}
+
+	/**
+	 * Muestra toda la información de todas las instalaciones del Polideportivo.
+	 */
+	public void mostrarTodaLaInfoInstalaciones() {
+		for (Instalacion instalacion : listaInstalaciones) {
+			System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + instalacion.getNombre() +
+					(instalacion instanceof Acondicionable ? ConsoleColors.YELLOW_BOLD_BRIGHT + "*" + ConsoleColors.CYAN_BOLD_BRIGHT : "") + ":" + ConsoleColors.RESET);
+			instalacion.mostrarInfoDetallada();
+			System.out.println();
+		}
 	}
 }
